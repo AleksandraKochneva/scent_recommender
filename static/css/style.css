@@ -1,0 +1,67 @@
+body {
+    background: url("../images/background.jpeg") no-repeat center center fixed;
+    background-size: cover; /* Ensures the image covers the entire viewport */
+    background-position: center center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the background fixed while scrolling */
+    background-color: #f5f5f5; /* Fallback color in case the image fails to load */
+    color: #fff; /* Default text color */
+}
+
+.container {
+    max-width: 800px; /* Set the maximum width you want */
+    width: 100%; /* Make sure it stretches to the width of its parent element */
+    padding: 20px; /* Optional: Add some padding */
+    margin: 0 auto; /* Center the container horizontally */
+    background: rgba(0, 0, 0, 0.5); /* Background color with transparency */
+    border-radius: 10px; /* Rounded corners */
+}
+
+h1, label {
+    color: #fff; /* Text color */
+}
+
+.btn {
+    background-color: #f5f5dc; /* Light beige color */
+    color: #333; /* Dark text color for contrast */
+    border: 1px solid #dcdcdc; /* Light border */
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background-color: #e0e0d1; /* Slightly darker beige for hover effect */
+    color: #000;
+}
+
+.btn-success {
+    background-color: #A9DFBF;
+    border-color: #dcdcdc;
+    padding: 10px 28px; /* Padding for size (top-bottom, left-right) */
+    font-size: 16px; /* Font size */
+    border-radius: 4px; /* Rounded corners */
+}
+
+.btn-danger {
+    background-color: #E59866;
+    border-color: #dcdcdc;
+}
+
+.btn-info {
+    background-color: #f5f5dc;
+    border-color: #dcdcdc;
+}
+
+
+/* Custom Select2 dropdown styling */
+.select2-container--default .select2-results__option {
+    background-color: white; /* Background color of options */
+    color: darkgrey; /* Text color of options */
+}
+
+.select2-container--default .select2-results__option--highlighted {
+    background-color: #f0f0f0; /* Background color of highlighted option */
+    color: black; /* Text color of highlighted option */
+}
+
+

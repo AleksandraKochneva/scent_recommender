@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote for Perfume</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-5">
+<!--        <h1 class="text-center">Vote for Perfume</h1>-->
+<!--        <form method="POST" class="mt-4">-->
+<!--            <div class="form-group">-->
+<!--                <label for="perfume_vote_selection">Choose a perfume you want to vote for:</label>-->
+<!--                <select id="perfume_vote_selection" name="perfume_vote_selection" class="form-control select2" multiple>-->
+<!--                    {% for perfume in catalog_df['full_name'] %}-->
+<!--                        <option value="{{ perfume }}">{{ perfume }}</option>-->
+<!--                    {% endfor %}-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <button type="submit" name="vote_type" value="like" class="btn btn-success">Like</button>-->
+<!--            <button type="submit" name="vote_type" value="dislike" class="btn btn-danger">Dislike</button>-->
+<!--        </form>-->
+        <hr>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-info">
+                    <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="text-center">
+            <a href="{{ url_for('home') }}" class="btn btn-primary">Go back</a>
+        </div>
+    </div>
+<!--    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>-->
+<!--    <script>-->
+<!--        $(document).ready(function() {-->
+<!--            $('.select2').select2({-->
+<!--                placeholder: "Select a perfume",-->
+<!--                allowClear: true-->
+<!--            });-->
+<!--        });-->
+<!--    </script>-->
+</body>
+</html>
