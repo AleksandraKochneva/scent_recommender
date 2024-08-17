@@ -141,7 +141,7 @@ def get_brands_by_perfume(perfume):
             df_unique = df.drop_duplicates(subset='lists')
             brands_data = df_unique['lists'].tolist()
             logger.info('Brands data parsed')
-            return brands_data[:5]
+            return brands_data[:3]
         else:
             logger.error(f'Could not parse brands data. Response code: {response.status_code}')
             return []

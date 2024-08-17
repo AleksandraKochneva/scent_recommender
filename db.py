@@ -2,9 +2,10 @@ import logging
 import os
 
 import pandas as pd
-from sqlalchemy import create_engine, Table, MetaData, text
+from sqlalchemy import text, create_engine, MetaData, Table, Column, Integer, String, Float, Boolean, ForeignKey, Index, insert
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import SQLAlchemyError
 
 logger = logging.getLogger(__name__)
 
@@ -15,18 +16,67 @@ ca_string = os.getenv('ca_string')
 engine = create_engine(ca_string)
 
 
-def insert_data(table_name, insert_list):
+def insert_data(table_name, insert_list, engine = engine):
     logger.info(f'New data inserting into {table_name} started')
 
-    tables_fixed = {'perfumes_catalog': 'perfume_id', 'perfumes_data': 'perfume_id', 'brands': 'brand_id',
-                    'reviews_data': 'review_id', 'reviewers': 'reviewer_id'}
-    tables_flex = {'my_votes': 'perfume_id'}
-
     metadata = MetaData()
+
+    table_schemas = {
+        'brands': Table(
+            'brands', metadata,
+            Column('brand_id', String, primary_key=True),
+            Column('brand_name', String),
+            Column('brand_url', String)
+        ),
+        'my_votes': Table(
+            'my_votes', metadata,
+            Column('perfume_id', Integer, primary_key=True),
+            Column('vote', Boolean)
+        ),
+        'perfumes_catalog': Table(
+            'perfumes_catalog', metadata,
+            Column('perfume_id', Integer, primary_key=True),
+            Column('perfume_nickname', String),
+            Column('perfume_name', String),
+            Column('perfume_url', String),
+            Column('brand_id', String),
+            Index('idx_brand_id', 'brand_id'),
+            Index('idx_perfume_name', 'perfume_name'),
+            Index('idx_perfume_id_brand_id', 'perfume_id', 'brand_id')
+        ),
+        'perfumes_data': Table(
+            'perfumes_data', metadata,
+            Column('perfume_id', Integer, primary_key=True),
+            Column('perfumer', String),
+            Column('accords', String),
+            Column('notes', String),
+            Column('rating', Float),
+            Column('votes_number', Integer)
+        ),
+        'reviewers': Table(
+            'reviewers', metadata,
+            Column('reviewer_id', String, primary_key=True),
+            Column('reviewer', String)
+        ),
+        'reviews_data': Table(
+            'reviews_data', metadata,
+            Column('review_id', String, primary_key=True),
+            Column('perfume_id', Integer, ForeignKey('perfumes_catalog.perfume_id')),
+            Column('reviewer_id', String, ForeignKey('reviewers.reviewer_id')),
+            Column('review', String),
+            Column('review_tone', Boolean)
+        )
+    }
+
     metadata.reflect(bind=engine)
 
     if table_name not in metadata.tables:
-        raise ValueError(f'Table {table_name} does not exist in the database')
+        logger.info(f'Table {table_name} does not exist. Creating it.')
+        if table_name in table_schemas:
+            table_schemas[table_name].create(engine)
+            metadata.create_all(engine)
+        else:
+            raise ValueError(f'Unknown table schema for {table_name}')
 
     table = Table(table_name, metadata, autoload_with=engine)
 
@@ -34,20 +84,22 @@ def insert_data(table_name, insert_list):
     session = Session()
 
     try:
-        if table_name in tables_fixed:
+        if table_name in ['perfumes_catalog', 'brands', 'perfumes_data', 'reviewers', 'reviews_data']:
             stmt = insert(table).values(insert_list)
-            stmt = stmt.on_conflict_do_nothing(index_elements=[tables_fixed[table_name]])
-        elif table_name in tables_flex:
+            stmt = stmt.on_conflict_do_nothing(
+                index_elements=[table.columns[table_schemas[table_name].primary_key.columns.keys()[0]]])
+        elif table_name == 'my_votes':
             stmt = insert(table).values(insert_list)
             stmt = stmt.on_conflict_do_update(
-                index_elements=[tables_flex[table_name]],
+                index_elements=['perfume_id'],
                 set_={'vote': stmt.excluded.vote}
             )
         else:
             raise ValueError(f'Unknown table type for {table_name}')
+
         session.execute(stmt)
         session.commit()
-    except Exception as e:
+    except SQLAlchemyError as e:
         session.rollback()
         logger.error(f'Error inserting data into {table_name}: {e}')
         raise
