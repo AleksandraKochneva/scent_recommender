@@ -37,16 +37,16 @@ class MongoDBHandler(logging.Handler):
 
 
 def setup_logging():
-    mongo_uri = m_string
-    db_name = 'scent_db'
-    collection_name = 'scent_recommender_logs'
+    # mongo_uri = m_string
+    # db_name = 'scent_db'
+    # collection_name = 'scent_recommender_logs'
     logger = logging.getLogger()
     if not logger.hasHandlers():
         logger.setLevel(logging.INFO)
 
-        mongo_handler = MongoDBHandler(mongo_uri, db_name, collection_name)
-        mongo_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-        logger.addHandler(mongo_handler)
+        # mongo_handler = MongoDBHandler(mongo_uri, db_name, collection_name)
+        # mongo_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+        # logger.addHandler(mongo_handler)
 
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
