@@ -11,6 +11,9 @@ This is a Flask-based web application that predicts whether a user will like a p
 - [Modules](#modules)
   - [db.py](#dbpy)
   - [parser.py](#parserpy)
+  - [get_prediction.py](#get_predictionpy)
+  - [main.py](#mainpy)
+  - [model_training.py](#model_trainingpy)
 - [Contributing](#contributing)
 - [License](#license)
 
