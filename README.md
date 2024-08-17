@@ -1,6 +1,7 @@
 # Perfume Recommendation App
 
 This is a Flask-based web application that predicts whether a user will like a perfume based on historical data and machine learning predictions. The app allows users to vote on perfumes, check predictions, and add new perfumes to the catalog.
+![App Interface](image.png)
 
 ## Table of Contents
 
